@@ -1,0 +1,302 @@
+/*Reglas condicionales Css*/
+
+/* @document*/
+
+@document url(...) {
+    
+}
+/* or */
+@document url-prefix(...) {
+    
+}
+/* or */
+@document domain(...) {
+    
+}
+/* or */
+@document regexp("...") {
+    
+}
+
+/* or (multiple functions) */
+@document @domain(..), regexp("..") {
+    /* styles apply to pages belonging to the domain name specified, and whose URL matches the provided regular expression */
+}
+@document url-prefix(..), domain(..), regexp("...") {
+    /* styles apply to pages belonging to the domain name specified, and whose URL starts with the specified prefix and also matches the provided regular expression */
+}
+
+@document url("https://www.example.com/") {
+h1 {
+    color: green;
+}
+}
+
+/* @media */
+
+
+body {
+    background-color: tan;
+    color: black;
+}
+
+/* On screens that are 992px wide or less, the background color is blue */
+@media screen and (max-width: 992px) {
+    body {
+        background-color: blue;
+        color: white;
+    }
+}
+
+  /* On screens that are 600px wide or less, the background color is olive */
+@media screen and (max-width: 600px) {
+    body {
+        background-color: olive;
+        color: white;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+  /* Style the top navigation bar */
+.topnav {
+    overflow: hidden;
+    background-color: #333;
+}
+
+  /* Style the topnav links */
+.topnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+  /* Change color on hover */
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+  /* On screens that are 600px wide or less, make the menu links stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+    .topnav a {
+        float: none;
+        width: 100%;
+    }
+}
+
+
+@media print {
+    body { font-size: 10pt }
+    }
+@media screen {
+    body { font-size: 13px }
+    }
+@media screen, print {
+    body { line-height: 1.2 }
+    }
+
+@media screen, 3D {
+        P { color: green; }
+        }
+
+/* @support*/
+
+@supports (display: grid) {
+        .wrapper {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 10px;
+        grid-auto-rows: minmax(100px, auto);
+        }
+        .column-one {
+        grid-column: 1 / 3;
+        grid-row: 1;
+        }
+}
+@supports not (display: grid) {
+        .div { float: left; 
+        }
+}
+
+.p-ejemplo-supports {
+    color: red;
+}
+
+@supports (display: contents) {
+
+    .p-ejemplo-supports {
+        color: green;
+    }
+
+}
+
+@supports (display:flex) and (not (display:grid)) {}
+
+/*Si soportas flex y no soportas grid, interpreta el contenido de las llaves*/
+
+/* @import */
+
+@import url('/css/reset.css');
+@import url('/css/layout.css');
+@import url('/css/typograhpy.css');
+@import url('/css/content.css');
+@import url('/css/print.css') print;
+@import url('landscape.css') screen and (orientation:landscape);
+
+
+
+/* @if */
+
+@IF (<selector> (<property> <Comparative operators> <value>)) {
+    /* set de rules */
+}
+@IF (.mi_lista (height >= 10rem) and (display == block)) {
+/* reglas */
+}
+
+
+/*Prefijos*/
+
+borde-redondo(--valor){
+    -webkit-border-radius: --valor;
+    -moz-border-radius: --valor;
+    -ms-border-radius: --valor;
+    -o-border-radius: $valor;
+    border-radius: $valor;
+}
+
+
+/*Funciones */
+
+
+@function liquido($valor, $valorpadre){
+    @return $valor / $valorpadre * 100%;
+}
+
+.div {
+    width: liquido(300px, 950px);
+        
+}
+
+
+
+
+@function rem($size) {
+    @return $size / 16px * 1rem;
+}
+
+.div {
+    font-size: rem(12px);
+}
+
+
+
+/* Variables */
+
+/* Ejemplo con variables */
+
+:root {
+    --main-bg-color: brown;
+}
+
+
+.uno {
+    color: white;
+    background-color: var(--main-bg-color);
+    margin: 10px;
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+}
+
+.dos {
+    color: white;
+    background-color: black;
+    margin: 10px;
+    width: 150px;
+    height: 70px;
+    display: inline-block;
+}
+.tres {
+    color: white;
+    background-color: var(--main-bg-color);
+    margin: 10px;
+    width: 75px;
+}
+
+:root {
+    --base-color: #937b19;
+}
+
+.box {
+    color: color-mod(var(--base-color) tint(59%));
+}
+
+/* Extend */
+
+.foo{
+    color: red;
+}
+
+.bar{
+    @extend .foo;
+}
+
+
+/*nesting*/
+
+
+/*Ejemplo Válido:*/
+ 
+.foo { 
+    color : azul ; 
+    & > . bar { color : rojo ; } 
+} 
+/* equivalente a 
+   .foo {color: azul; } 
+   .foo> .bar {color: rojo; } 
+* /
+
+/*Ejemplo Invalido:*/
+
+.foo { 
+    color : rojo ; 
+    .bar { color : azul ; } 
+} 
+/* No válido porque no hay selector de anidamiento */
+
+.foo { 
+    color : red ; 
+    .barra & { color : azul ; } 
+} 
+/* No válido porque & no está en el primer selector compuesto */
+
+
+.foo { 
+    color : rojo ; 
+    @ nest & > . bar { 
+        color : azul ; 
+    } 
+} 
+  / * equivalente a 
+     .foo {color: red; } 
+     .foo> .bar {color: azul; } 
+  * /
+  
+  .foo { 
+    color : rojo ; 
+    @ nido . padre & { 
+      color : azul ; 
+    } 
+  } 
+  / * equivalente a 
+     .foo {color: red; } 
+     .parent .foo {color: azul; } 
+  * /
+  
